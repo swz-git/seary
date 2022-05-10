@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit&display=swap");
+
+:root {
+  --color-background: #251d3a;
+  --color-background-2: #2a2550;
+  --color-accent: #e04d01;
+  --color-accent-2: #ff7700;
+  --color-foreground: #c4ddff;
+  --color-foreground-2: #8888a8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+main {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-2);
+  color: var(--color-foreground);
+  font-family: "Outfit", sans-serif;
+}
+
+.content {
+  overflow-y: auto;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  height: 6rem;
+  padding-top: 0.5rem;
+  justify-content: space-between;
+  background-color: var(--color-background);
+  position: sticky;
+}
+header > * {
+  padding: 0 1.5rem;
+}
+.topHeader {
+  display: flex;
+  border-radius: 0 0 0.5rem 0.5rem;
+  height: 3rem;
+  align-items: center;
+}
+p.title {
+  font-size: 1.5rem;
+  color: var(--color-accent-2);
+}
+input {
+  margin-left: 2rem;
+  height: 2.25rem;
+  border-radius: 2.25rem;
+  border: 1px solid var(--color-foreground);
+  font-size: 1.1rem;
+  width: 70vw;
+  max-width: 40rem;
+  outline: none;
+  padding: 0 1rem;
+  padding-right: 2rem;
+  font-family: Inter, Arial, sans-serif;
+}
+img.search {
+  background-image: url("/assets/search_icon.svg");
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: -2rem;
+  cursor: pointer;
+  user-select: none;
+}
+input:active {
+  border: 1px solid var(--color-accent-2);
+}
+@media (orientation: portrait) {
+  input {
+    width: auto;
+    flex-grow: 10;
+  }
+}
+.bottomHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  height: 2rem;
+}
+.bottomHeader p {
+  border-bottom: 1px solid var(--color-foreground);
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  cursor: pointer;
+}
+.bottomHeader p.active {
+  border-color: var(--color-accent-2);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

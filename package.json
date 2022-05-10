@@ -1,0 +1,25 @@
+{
+  "name": "seary",
+  "version": "0.1.0",
+  "description": "A searx frontend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node esbuild.js dev",
+    "build": "node esbuild.js prod"
+  },
+  "keywords": [
+    "searx",
+    "frontend",
+    "search",
+    "svelte"
+  ],
+  "author": "swz",
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.12.15",
+    "esbuild-plugin-text-replace": "^1.2.0",
+    "esbuild-svelte": "^0.5.3",
+    "live-server": "^1.2.1",
+    "svelte": "^3.38.3"
+  }
+}
