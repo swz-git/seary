@@ -1,6 +1,6 @@
-# svelte-template
+# seary
 
-swz's starter kit to build [Svelte](https://svelte.dev/) apps with [esbuild](https://esbuild.github.io/).
+SearX Frontend in svelte
 
 ## Install
 
