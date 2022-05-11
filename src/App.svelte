@@ -13,6 +13,7 @@
     .filter((item) => item != null)
     .join(" - ");
 
+  let data;
   let feed = [];
   let resultTime = 0;
   let currentlyLoading = false;
@@ -41,18 +42,22 @@
     if (category === "Images") {
       config.category_images = 1;
     }
-    let req = await fetch(`https://${window.env.SEARXDOMAIN}/search`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams(config),
-    }).catch((e) => {
+    let req = await fetch(
+      `https://${window.env.SEARXDOMAIN}/search?${new URLSearchParams(
+        config
+      ).toString()}`,
+      {
+        method: "GET",
+        // headers: {
+        //   "Content-Type": "application/x-www-form-urlencoded",
+        // },
+      }
+    ).catch((e) => {
       currentlyLoading = false;
       throw e;
     });
     currentlyLoading = false;
-    let data = await req.json();
+    data = await req.json();
     let endTime = new Date().getTime();
     feed = data.results;
     resultTime = endTime - startTime;
@@ -105,12 +110,12 @@
     {#if currentlyLoading}
       <h1>Loading results</h1>
     {/if}
-    {#if !currentlyLoading}
+    {#if !currentlyLoading && feed.length > 0}
       {#if category === "Web"}
-        <WebFeed data={feed} {resultTime} />
+        <WebFeed {data} {resultTime} />
       {/if}
       {#if category === "Images"}
-        <ImagesFeed data={feed} {resultTime} />
+        <ImagesFeed {data} {resultTime} />
       {/if}
     {/if}
   </div>
