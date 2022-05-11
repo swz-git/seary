@@ -8,7 +8,7 @@
     <p class="engines">{data.engines.join(", ")}</p>
   </div>
   <a href={data.url}>{data.title}</a>
-  <p class="description">{data.content}</p>
+  <p class="description">{data.content || ""}</p>
 </div>
 
 <style scoped>
@@ -26,6 +26,12 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    width: 100%;
+  }
+  .url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .engines {
     color: var(--color-foreground-2);

@@ -1,11 +1,17 @@
 <script>
   import stylesheet from "./style.css";
   import WebFeed from "./Components/Web/Feed.svelte";
+  import ImagesFeed from "./Components/Images/Feed.svelte";
   document.title = window.env.APPNAME;
   document.setFavicon("/assets/search_icon.svg");
 
   const urlParams = new URLSearchParams(window.location.search);
   let searchInput = urlParams.get("q");
+  let category = urlParams.get("c") || "Web";
+
+  document.title = [searchInput, category.toLowerCase(), window.env.APPNAME]
+    .filter((item) => item != null)
+    .join(" - ");
 
   let feed = [];
   let resultTime = 0;
@@ -16,20 +22,31 @@
     let startTime = new Date().getTime();
     lastSearch = term;
     currentlyLoading = true;
+    let config = {
+      q: term,
+      pageno: 1,
+      time_range: "None",
+      language: "en-US",
+      format: "json",
+      engines:
+        category === "Web"
+          ? "google,bing,brave"
+          : category === "Images"
+          ? "google images,bing images,qwant images"
+          : "",
+    };
+    if (category === "Web") {
+      config.category_general = 1;
+    }
+    if (category === "Images") {
+      config.category_images = 1;
+    }
     let req = await fetch(`https://${window.env.SEARXDOMAIN}/search`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams({
-        category_general: 1,
-        q: term,
-        pageno: 1,
-        time_range: "None",
-        language: "en-US",
-        format: "json",
-        engines: "google,bing,brave",
-      }),
+      body: new URLSearchParams(config),
     }).catch((e) => {
       currentlyLoading = false;
       throw e;
@@ -46,15 +63,27 @@
     search(searchInput);
   }
 
+  function updateSearch(query = lastSearch, cat = category) {
+    window.location = `/?${new URLSearchParams({
+      q: query,
+      c: cat,
+    }).toString()}`;
+  }
+
   function keydown(e) {
-    console.log(e);
     if (e.key === "Enter") {
-      window.location = "/?q=" + e.target.value;
+      updateSearch(e.target.value);
     }
   }
 
+  function web() {
+    category = "Web";
+    updateSearch();
+  }
   function images() {
-    window.location = `https://duck.com/?q=${lastSearch}&ia=images&iax=images`;
+    category = "Images";
+    updateSearch();
+    // window.location = `https://duck.com/?q=${lastSearch}&ia=images&iax=images`;
   }
 </script>
 
@@ -66,8 +95,10 @@
       <img src="/assets/search_icon.svg" class="search" alt="Search" />
     </div>
     <div class="bottomHeader">
-      <p class="active">Web</p>
-      <p on:click={images}>Images</p>
+      <p class={category === "Web" ? "active" : ""} on:click={web}>Web</p>
+      <p class={category === "Images" ? "active" : ""} on:click={images}>
+        Images
+      </p>
     </div>
   </header>
   <div class="content">
@@ -75,7 +106,12 @@
       <h1>Loading results</h1>
     {/if}
     {#if !currentlyLoading}
-      <WebFeed data={feed} {resultTime} />
+      {#if category === "Web"}
+        <WebFeed data={feed} {resultTime} />
+      {/if}
+      {#if category === "Images"}
+        <ImagesFeed data={feed} {resultTime} />
+      {/if}
     {/if}
   </div>
 </main>
